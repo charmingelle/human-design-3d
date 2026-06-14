@@ -1,11 +1,15 @@
 # Human Design 3D
 
+**Live demo:** https://charmingelle.github.io/human-design-3d/
+
+<video src="demo.mp4" controls width="100%"></video>
+
 An interactive 3D bodygraph explorer built with React, Three.js, and React Three Fiber.
 
 ## What this demonstrates
 
 - **3D rendering with React Three Fiber** — energy centers are extruded 3D shapes (triangles, squares, rhombuses) with per-material color, opacity, and a particle effect on defined centers.
-- **Dynamic chart loading** — paste a birth date/time/place to calculate a Human Design chart via a backend API; the bodygraph instantly updates to show defined/undefined centers, active gates, and colored channels (personality = conscious, design = unconscious).
+- **Dynamic chart loading** — paste a birth date/time/place to calculate a Human Design chart entirely client-side; the bodygraph instantly updates to show defined/undefined centers, active gates, and colored channels (personality = conscious, design = unconscious).
 - **Rich contextual tooltips** — every clickable element (centers, gates, channels, type/profile/authority badges) shows a description tooltip with Human Design meanings.
 - **Vite + Tailwind CSS** for fast development and a dark, minimal UI.
 - **Automatic GitHub Pages deployment** via a GitHub Actions workflow.
@@ -17,11 +21,17 @@ react-app/          Vite + React app
   src/
     components/
       bodygraph/    3D bodygraph mesh, energy centers, gates, channels
-      Tooltip.tsx   Shared floating tooltip
+      Viewport.tsx  Canvas + overlay layout
+      Scene.tsx     Three.js scene (lights, camera controller)
+      Sidebar.tsx   Left panel (bodygraph controls)
+      RightSidebar  Right panel (chart data input)
       ChartBadges   Type / Profile / Authority cards
+      PlanetColumns Planet gate table overlay
+      Tooltip.tsx   Shared floating tooltip
+    lib/
+      chart.ts      Self-contained Human Design chart engine (TypeScript)
     store/          Zustand global state
     constants/      Colors
-    data/           SVG reference overlay
 .github/workflows/  deploy.yml — builds and publishes to GitHub Pages
 ```
 
