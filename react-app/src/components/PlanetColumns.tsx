@@ -26,8 +26,8 @@ const PLANET_SYMBOL: Record<string, string> = {
 
 // ── Design tokens ────────────────────────────────────────────────────────────
 
-const COLOR_UNCONSCIOUS = '#9d2a7e'   // magenta (Design / Unconscious)
-const COLOR_CONSCIOUS   = '#1a1a2e'   // near-black (Personality / Conscious)
+export const COLOR_UNCONSCIOUS = '#9d2a7e'   // magenta (Design / Unconscious)
+export const COLOR_CONSCIOUS   = '#1a1a2e'   // near-black (Personality / Conscious)
 const TEXT_COLOR        = '#ffffff'
 
 // ── Sub-components ───────────────────────────────────────────────────────────
@@ -103,29 +103,32 @@ function Column({
 
 // ── Main overlay ─────────────────────────────────────────────────────────────
 
-export default function PlanetColumns() {
+interface PlanetColumnsProps {
+  mobileLeftVisible:  boolean
+  mobileRightVisible: boolean
+}
+
+export default function PlanetColumns({ mobileLeftVisible, mobileRightVisible }: PlanetColumnsProps) {
   const personality = useStore((s) => s.chartPlanetsPersonality)
   const design      = useStore((s) => s.chartPlanetsDesign)
 
   if (!personality || !design) return null
 
   return (
-    <div
-      style={{
-        position:      'absolute',
-        inset:         0,
-        pointerEvents: 'none',
-        display:       'flex',
-        alignItems:    'center',
-        justifyContent:'space-between',
-        padding:       '0 12px',
-      }}
-    >
-      {/* Left — Unconscious (Design) */}
-      <Column label="Unconscious" planets={design} bg={COLOR_UNCONSCIOUS} align="left" />
+    <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+      {/* Left — Unconscious (Design): pinned to left edge */}
+      <div
+        className={`absolute left-3 top-1/2 -translate-y-1/2 md:block ${mobileLeftVisible ? 'block' : 'hidden'}`}
+      >
+        <Column label="Unconscious" planets={design} bg={COLOR_UNCONSCIOUS} align="left" />
+      </div>
 
-      {/* Right — Conscious (Personality) */}
-      <Column label="Conscious" planets={personality} bg={COLOR_CONSCIOUS} align="right" />
+      {/* Right — Conscious (Personality): pinned to right edge */}
+      <div
+        className={`absolute right-3 top-1/2 -translate-y-1/2 md:block ${mobileRightVisible ? 'block' : 'hidden'}`}
+      >
+        <Column label="Conscious" planets={personality} bg={COLOR_CONSCIOUS} align="right" />
+      </div>
     </div>
   )
 }

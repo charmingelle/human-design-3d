@@ -34,11 +34,47 @@ function CameraController() {
   return null
 }
 
+/**
+ * Fixes R3F canvas not re-centering after device orientation change.
+ * orientationchange fires before layout settles, so we wait ~300 ms then
+ * manually re-measure the parent container and push the new size to the
+ * WebGL renderer + camera.
+ */
+function OrientationFix() {
+  const { gl, camera } = useThree()
+
+  useEffect(() => {
+    const handleChange = () => {
+      setTimeout(() => {
+        const parent = gl.domElement.parentElement
+        if (!parent) return
+        const w = parent.clientWidth
+        const h = parent.clientHeight
+        gl.setSize(w, h)
+        if (camera instanceof THREE.PerspectiveCamera) {
+          camera.aspect = w / h
+          camera.updateProjectionMatrix()
+        }
+      }, 300)
+    }
+
+    window.addEventListener('orientationchange', handleChange)
+    screen.orientation?.addEventListener('change', handleChange)
+    return () => {
+      window.removeEventListener('orientationchange', handleChange)
+      screen.orientation?.removeEventListener('change', handleChange)
+    }
+  }, [gl, camera])
+
+  return null
+}
+
 export default function Scene() {
   return (
     <>
       <OrbitControls makeDefault enableDamping dampingFactor={0.08} zoomToCursor />
       <CameraController />
+      <OrientationFix />
 
       <ambientLight intensity={0.5} />
       <directionalLight position={[4, 6, 5]}  intensity={1.2} />
