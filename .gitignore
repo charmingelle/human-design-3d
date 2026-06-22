@@ -1,2 +1,4 @@
 .DS_Store
 **/.DS_Store
+react-app/.npmrc
+react-app/package-lock.json
