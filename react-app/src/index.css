@@ -58,6 +58,13 @@ input[type="range"]::-webkit-slider-thumb {
 .panel-input::placeholder { color: var(--color-dim); }
 .panel-input:focus { border-color: var(--color-accent-dim); }
 
+/* iOS Safari zooms when focused input font-size < 16px, breaking fixed layouts on close. */
+@media (max-width: 767px) {
+  .panel-input {
+    font-size: 16px;
+  }
+}
+
 /* ── Shared control button ── */
 .btn-ctrl {
   padding: 10px 0;

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import DataPanel from './bodygraph/DataPanel'
 
 interface RightSidebarProps {
@@ -6,6 +7,13 @@ interface RightSidebarProps {
 }
 
 export default function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
+  // Blur any focused input when the panel closes so iOS releases its viewport zoom.
+  useEffect(() => {
+    if (!isOpen && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur()
+    }
+  }, [isOpen])
+
   return (
     <>
       {/* Mobile backdrop */}
