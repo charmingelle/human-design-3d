@@ -35,14 +35,6 @@ function IconData() {
   )
 }
 
-function IconReset() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20" aria-hidden="true">
-      <path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.36 2.64L3 8" />
-      <polyline points="3 3 3 8 8 8" />
-    </svg>
-  )
-}
 
 function IconSun() {
   return (
@@ -72,7 +64,8 @@ export default function Viewport({
 }: ViewportProps) {
   const hideTooltip  = useStore((s) => s.hideTooltip)
   const hasChart     = useStore((s) => !!(s.chartPlanetsPersonality && s.chartPlanetsDesign))
-  const triggerReset = useStore((s) => s.triggerReset)
+  const autoSpin     = useStore((s) => s.autoSpin)
+  const toggleSpin   = useStore((s) => s.toggleAutoSpin)
 
   return (
     <div className="flex-1 relative" style={{ backgroundColor: BG_COLOR }}>
@@ -126,12 +119,18 @@ export default function Viewport({
         {/* Left column: reset (top) + bodygraph toggle (bottom) */}
         <div className="flex flex-col items-center gap-2 pointer-events-auto">
           <button
-            onClick={triggerReset}
-            aria-label="Reset camera"
-            className="w-10 h-10 rounded-full flex items-center justify-center border transition-colors duration-150 bg-surface border-border text-muted"
+            onClick={toggleSpin}
+            aria-label={autoSpin ? 'Stop spin' : 'Start spin'}
+            className={[
+              'w-10 h-10 rounded-full flex items-center justify-center',
+              'border transition-colors duration-150 text-base',
+              autoSpin
+                ? 'bg-accent-dim border-accent text-text'
+                : 'bg-surface border-border text-muted',
+            ].join(' ')}
             style={{ backdropFilter: 'blur(8px)' }}
           >
-            <IconReset />
+            {autoSpin ? '⏹' : '⟳'}
           </button>
           <button
             onClick={onToggleLeft}
