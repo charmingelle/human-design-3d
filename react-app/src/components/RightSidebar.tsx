@@ -33,7 +33,7 @@ export default function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
         isOpen ? 'translate-x-0' : 'translate-x-full',
       ].join(' ')}>
         <div className="flex flex-col flex-1 overflow-y-auto" style={{ padding: '12px' }}>
-          <DataPanel />
+          <DataPanel onAfterCalculate={onClose} />
         </div>
       </aside>
     </>

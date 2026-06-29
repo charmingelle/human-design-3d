@@ -16,7 +16,11 @@ function daysInMonth(year: number, month: number): number {
   return new Date(year, month, 0).getDate()
 }
 
-export default function DataPanel() {
+interface DataPanelProps {
+  onAfterCalculate?: () => void
+}
+
+export default function DataPanel({ onAfterCalculate }: DataPanelProps) {
   const setChartResult   = useStore((s) => s.setChartResult)
   const clearChartResult = useStore((s) => s.clearChartResult)
 
@@ -39,6 +43,7 @@ export default function DataPanel() {
       const result = calculateChart(year, month, day, hour, minutes, offset)
       console.log(result)
       setChartResult(result)
+      onAfterCalculate?.()
     } catch (err) {
       setError((err as Error).message)
     } finally {
