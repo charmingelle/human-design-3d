@@ -27,7 +27,7 @@ export default function RightSidebar({ isOpen, onClose }: RightSidebarProps) {
       <aside className={[
         'w-60 flex-shrink-0 bg-surface border-l border-border flex flex-col',
         // mobile: fixed overlay, slides in from right
-        'fixed inset-y-0 right-0 z-50 transition-transform duration-300 ease-in-out',
+        'fixed top-0 bottom-0 right-0 z-50 transition-transform duration-300 ease-in-out',
         // desktop: back in the normal flex flow
         'md:relative md:z-auto md:translate-x-0',
         isOpen ? 'translate-x-0' : 'translate-x-full',

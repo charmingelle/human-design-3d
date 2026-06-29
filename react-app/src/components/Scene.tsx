@@ -36,33 +36,46 @@ function CameraController() {
 
 /**
  * Fixes R3F canvas not re-centering after device orientation change.
- * orientationchange fires before layout settles, so we wait ~300 ms then
- * manually re-measure the parent container and push the new size to the
- * WebGL renderer + camera.
+ *
+ * Root cause: orientationchange fires before the browser has finished
+ * relaying out, so R3F's ResizeObserver captures stale dimensions.
+ *
+ * We wait 300 ms for layout to settle, then:
+ *  1. Clear any inline width/height the renderer may have stamped onto the
+ *     <canvas> element — those inline styles override R3F's CSS and prevent
+ *     automatic resizing on subsequent window-resize events.
+ *  2. Call gl.setSize(w, h, false) — updates Three.js renderer internals
+ *     without re-stamping inline styles (R3F uses `false` internally too).
+ *  3. Update camera aspect so the 3D object isn't distorted.
  */
 function OrientationFix() {
   const { gl, camera } = useThree()
 
   useEffect(() => {
-    const handleChange = () => {
+    const resize = (delay = 0) => {
       setTimeout(() => {
         const parent = gl.domElement.parentElement
         if (!parent) return
         const w = parent.clientWidth
         const h = parent.clientHeight
-        gl.setSize(w, h)
+        // Clear any previously stamped inline styles so CSS takes back control
+        gl.domElement.style.width  = ''
+        gl.domElement.style.height = ''
+        gl.setSize(w, h, false)
         if (camera instanceof THREE.PerspectiveCamera) {
           camera.aspect = w / h
           camera.updateProjectionMatrix()
         }
-      }, 300)
+      }, delay)
     }
 
-    window.addEventListener('orientationchange', handleChange)
-    screen.orientation?.addEventListener('change', handleChange)
+    const handleOrientation = () => resize(300)
+
+    window.addEventListener('orientationchange', handleOrientation)
+    screen.orientation?.addEventListener('change', handleOrientation)
     return () => {
-      window.removeEventListener('orientationchange', handleChange)
-      screen.orientation?.removeEventListener('change', handleChange)
+      window.removeEventListener('orientationchange', handleOrientation)
+      screen.orientation?.removeEventListener('change', handleOrientation)
     }
   }, [gl, camera])
 

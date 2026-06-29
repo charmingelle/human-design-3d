@@ -68,7 +68,7 @@ export default function Viewport({
   const toggleSpin   = useStore((s) => s.toggleAutoSpin)
 
   return (
-    <div className="flex-1 relative" style={{ backgroundColor: BG_COLOR }}>
+    <div className="flex-1 relative overflow-hidden" style={{ backgroundColor: BG_COLOR }}>
       <Canvas
         camera={{ fov: 45, near: 0.1, far: 100, position: [2.5, 2, 3] }}
         gl={{ antialias: true }}
@@ -84,7 +84,10 @@ export default function Viewport({
 
       {/* Sun buttons at top corners — mobile only, only when chart data exists */}
       {hasChart && (
-        <div className="absolute top-4 left-0 right-0 flex justify-between px-5 md:hidden pointer-events-none z-30">
+        <div
+          className="absolute left-0 right-0 flex justify-between px-5 md:hidden pointer-events-none z-30"
+          style={{ top: 'calc(env(safe-area-inset-top, 0px) + 1rem)' }}
+        >
           <button
             onClick={onToggleLeftPlanet}
             aria-label="Toggle unconscious planet column"
@@ -114,7 +117,10 @@ export default function Viewport({
       )}
 
       {/* Panel toggle buttons at bottom corners — mobile only */}
-      <div className="absolute bottom-6 left-0 right-0 flex justify-between items-end px-5 md:hidden pointer-events-none z-30">
+      <div
+        className="absolute left-0 right-0 flex justify-between items-end px-5 md:hidden pointer-events-none z-30"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom, 0px) + 1.5rem)' }}
+      >
 
         {/* Left column: reset (top) + bodygraph toggle (bottom) */}
         <div className="flex flex-col items-center gap-2 pointer-events-auto">

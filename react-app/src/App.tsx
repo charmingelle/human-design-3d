@@ -17,7 +17,7 @@ export default function App() {
   const toggleRightPlanet = () => setRightPlanetOpen(o => !o)
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex overflow-hidden" style={{ height: '100dvh' }}>
       <Sidebar isOpen={leftOpen} onClose={() => setLeftOpen(false)} />
       <Viewport
         onToggleLeft={toggleLeft}
