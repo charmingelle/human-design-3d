@@ -34,6 +34,18 @@ export default function DataPanel({ onAfterCalculate }: DataPanelProps) {
   const [loading, setLoading] = useState(false)
   const [error,   setError]   = useState('')
 
+  function handleReset() {
+    clearChartResult()
+    setName(CURRENT_NAME)
+    setLocation(CURRENT_LOCATION)
+    setYear(1900)
+    setMonth(1)
+    setDay(1)
+    setHour(0)
+    setMinutes(0)
+    setError('')
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -171,7 +183,7 @@ export default function DataPanel({ onAfterCalculate }: DataPanelProps) {
           </button>
           <button
             type="button"
-            onClick={clearChartResult}
+            onClick={handleReset}
             className="btn-ctrl text-sm"
           >
             ✕ Reset
